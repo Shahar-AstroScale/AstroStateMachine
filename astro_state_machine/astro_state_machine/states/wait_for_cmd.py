@@ -6,6 +6,9 @@ from yasmin_ros.basic_outcomes import SUCCEED, ABORT, CANCEL
 from astro_actions import ACTION_NAMES
 
 from astro_action_interfaces.action import WaitForOpCmd
+from astro_action_interfaces.msg import UserCmd
+import enum 
+
 class WaitForCmdState(ActionState):
     """
     Class representing the state of the Fibonacci action.
@@ -16,6 +19,16 @@ class WaitForCmdState(ActionState):
     Attributes:
         None
     """
+    class Outcomes(enum.Enum):
+        SUCCEED = "succeed"
+        ABORT = "abort"
+        CANCEL = "cancel"
+        SELF_TEST = "self_test"
+        MANUAL_CONTROL = "manual_control"
+        SHUTDOWN = "shutdown"
+        CONNECT = "connect"
+        SEARCH_CONNECTOR = "search_connector"
+        GO_TO_POSITION = "go_to_position"
 
     def __init__(self) -> None:
         """
@@ -32,7 +45,7 @@ class WaitForCmdState(ActionState):
             WaitForOpCmd,  # action type
             ACTION_NAMES.WAIT_FRO_OP_CMD,  # action name
             self.create_goal_handler,  # callback to create the goal
-            None,  # outcomes. Includes (SUCCEED, ABORT, CANCEL)
+            [outcome.value for outcome in self.Outcomes],  # outcomes. Includes (SUCCEED, ABORT, CANCEL)
             self.response_handler,  # callback to process the response
             self.print_feedback,  # callback to process the feedback
         )
@@ -45,8 +58,17 @@ class WaitForCmdState(ActionState):
     def response_handler(
         self, blackboard: Blackboard, response: WaitForOpCmd.Result
     ) -> str:
-
-        return SUCCEED
+        if response.user_cmd.cmd_type == UserCmd.GO_TO_POSITION:
+            blackboard["next_position"] = {
+                "x": response.user_cmd.x,
+                "y": response.user_cmd.y,
+                "z": response.user_cmd.z,
+                "ax": response.user_cmd.ax,
+                "ay": response.user_cmd.ay,
+                "az": response.user_cmd.az,
+            }
+            return self.Outcomes.GO_TO_POSITION.value
+        return ABORT
 
     def print_feedback(
         self, blackboard: Blackboard, feedback: WaitForOpCmd.Feedback

@@ -6,6 +6,10 @@ from yasmin_ros.basic_outcomes import SUCCEED, ABORT, CANCEL
 from astro_actions import ACTION_NAMES
 
 from astro_action_interfaces.action import MoveToPosition
+import enum
+
+
+
 class GoToPosState(ActionState):
     """
     Class representing the state of the Fibonacci action.
@@ -16,6 +20,8 @@ class GoToPosState(ActionState):
     Attributes:
         None
     """
+    
+
 
     def __init__(self) -> None:
         """
@@ -40,6 +46,12 @@ class GoToPosState(ActionState):
     def create_goal_handler(self, blackboard: Blackboard) -> MoveToPosition.Goal:
         
         goal = MoveToPosition.Goal()
+        goal.x = blackboard["next_position"]["x"]
+        goal.y = blackboard["next_position"]["y"]
+        goal.z = blackboard["next_position"]["z"]
+        goal.ax = blackboard["next_position"]["ax"]
+        goal.ay = blackboard["next_position"]["ay"]
+        goal.az = blackboard["next_position"]["az"]
         return goal
 
     def response_handler(
@@ -51,4 +63,5 @@ class GoToPosState(ActionState):
     def print_feedback(
         self, blackboard: Blackboard, feedback: MoveToPosition.Feedback
     ) -> None:
+        blackboard["current_loaciton"] = feedback.current_x
         ...

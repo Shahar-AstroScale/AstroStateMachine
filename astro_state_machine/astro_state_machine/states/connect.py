@@ -5,6 +5,8 @@ from yasmin_ros.ros_logs import set_ros_loggers
 from yasmin_ros.basic_outcomes import SUCCEED, ABORT, CANCEL
 from astro_actions import ACTION_NAMES
 from astro_action_interfaces.action import Connect
+
+
 class ConnectState(ActionState):
     """
     Class representing the state of the Fibonacci action.
@@ -63,18 +65,4 @@ class ConnectState(ActionState):
     def print_feedback(
         self, blackboard: Blackboard, feedback: Connect.Feedback
     ) -> None:
-        """
-        Prints feedback from the Fibonacci action.
-
-        This method logs the partial sequence received during the action.
-
-        Parameters:
-            blackboard (Blackboard): The blackboard (not used in this method).
-            feedback (Fibonacci.Feedback): The feedback object from the Fibonacci action.
-
-        Returns:
-            None
-
-        Raises:
-            None
-        """
+        ...
