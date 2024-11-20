@@ -21,8 +21,6 @@ class GoToPosState(ActionState):
         None
     """
     
-
-
     def __init__(self) -> None:
         """
         Initializes the Connect State.
@@ -34,9 +32,10 @@ class GoToPosState(ActionState):
         Returns:
             None
         """
+        
         super().__init__(
             MoveToPosition,  # action type
-            ACTION_NAMES.GO_TO_POS,  # action name
+            ACTION_NAMES.GO_TO_POSITION,  # action name
             self.create_goal_handler,  # callback to create the goal
             None,  # outcomes. Includes (SUCCEED, ABORT, CANCEL)
             self.response_handler,  # callback to process the response
@@ -44,24 +43,25 @@ class GoToPosState(ActionState):
         )
 
     def create_goal_handler(self, blackboard: Blackboard) -> MoveToPosition.Goal:
+
+        print(f"blackboard: {blackboard}")
         
         goal = MoveToPosition.Goal()
+        goal.ax = blackboard["next_position"]["ax"] 
+        goal.ay = blackboard["next_position"]["ay"]
+        goal.az = blackboard["next_position"]["az"]
         goal.x = blackboard["next_position"]["x"]
         goal.y = blackboard["next_position"]["y"]
         goal.z = blackboard["next_position"]["z"]
-        goal.ax = blackboard["next_position"]["ax"]
-        goal.ay = blackboard["next_position"]["ay"]
-        goal.az = blackboard["next_position"]["az"]
+
         return goal
 
     def response_handler(
         self, blackboard: Blackboard, response: MoveToPosition.Result
     ) -> str:
-
         return SUCCEED
 
     def print_feedback(
         self, blackboard: Blackboard, feedback: MoveToPosition.Feedback
     ) -> None:
-        blackboard["current_loaciton"] = feedback.current_x
         ...

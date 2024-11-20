@@ -41,13 +41,15 @@ def main():
     )
 
     # Add states to the FSM
-    # sm.add_state(
-    #     "INIT",
-    #     InitState(),
-    #     transitions={
-    #         SUCCEED: "WAIT_FOR_OP_CMD",
-    #     },
-    # )
+    sm.add_state(
+        "INIT",
+        InitState(),
+        transitions={
+            SUCCEED: "WAIT_FOR_OP_CMD",
+            ABORT: "WAIT_FOR_OP_CMD",
+            CANCEL: "WAIT_FOR_OP_CMD",
+        },
+    )
 
     sm.add_state(
         "WAIT_FOR_OP_CMD",
@@ -63,8 +65,8 @@ def main():
             WaitForCmdState.Outcomes.CONNECT .value: "CONNECT",
             WaitForCmdState.Outcomes.SEARCH_CONNECTOR.value : "SEARCH_CONNECTOR",
             WaitForCmdState.Outcomes.MANUAL_CONTROL.value : "MANUAL_CONTROL",
-            WaitForCmdState.Outcomes.GO_TO_POSITION.value: "GO_TO_POS",
-            ABORT:"finish",
+            WaitForCmdState.Outcomes.GO_TO_POSITION.value: "GO_TO_POSITION",
+            ABORT:"WAIT_FOR_OP_CMD",
             CANCEL: "finish",
         },
     )
@@ -90,7 +92,7 @@ def main():
     )
 
     sm.add_state(
-        "GO_TO_POS",
+        "GO_TO_POSITION",
         GoToPosState(),
         transitions={
             SUCCEED: "WAIT_FOR_OP_CMD",

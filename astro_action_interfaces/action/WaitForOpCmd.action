@@ -1,4 +1,4 @@
-byte GO_TO_POS = 1
+byte GO_TO_POSITION = 1
 
 ---
 astro_action_interfaces/UserCmd user_cmd

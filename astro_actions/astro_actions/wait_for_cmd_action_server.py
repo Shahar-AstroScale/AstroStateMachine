@@ -14,7 +14,7 @@ class AstroWaitCmdActionServer(Node):
 
     def __init__(self):
 
-        super().__init__(f"{ACTION_NAMES.WAIT_FRO_OP_CMD}_action_server")
+        super().__init__(f"{ACTION_NAMES.WAIT_FOR_OP_CMD}_action_server")
         self.subscription = self.create_subscription(
             UserCmd,
             '/user_commands',
@@ -22,7 +22,7 @@ class AstroWaitCmdActionServer(Node):
             10)
 
         self._action_server = ActionServer(
-            self, WaitForOpCmd, ACTION_NAMES.WAIT_FRO_OP_CMD, self.execute_callback
+            self, WaitForOpCmd, ACTION_NAMES.WAIT_FOR_OP_CMD, self.execute_callback
         )
         self.is_waiting_for_cmd = False
         self._incoming_cmd = None
@@ -32,12 +32,14 @@ class AstroWaitCmdActionServer(Node):
         self.get_logger().info("Waitin for cmd...")
         while self._incoming_cmd is None:
             time.sleep(0.4)
-            
+        
+        
         result = WaitForOpCmd.Result()
         print("result.user_cmd: ", self._incoming_cmd)
         print("result.user_cmd type : ", type(self._incoming_cmd))
-
+        
         result.user_cmd = self._incoming_cmd
+        self._incoming_cmd = None
         goal_handle.succeed()
         return result
 

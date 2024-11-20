@@ -38,7 +38,6 @@ class InitState(ActionState):
         )
 
     def create_goal_handler(self, blackboard: Blackboard) -> Init.Goal:
-        
         goal = Init.Goal()
         return goal
 

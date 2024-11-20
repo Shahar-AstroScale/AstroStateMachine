@@ -1,10 +1,8 @@
 #include <memory>
-
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_components/register_node_macro.hpp"
 #include <moveit/move_group_interface/move_group_interface.h>
-
 #include "astro_action_interfaces/action/move_to_position.hpp"
 
 namespace astro_action_servers
@@ -21,17 +19,16 @@ namespace astro_action_servers
         : Node("go_to_position_action_server", options), move_group_interface(MoveGroupInterface(std::shared_ptr<rclcpp::Node>(this),"uf850"))
     {
       using namespace std::placeholders;
-      move_group_interface.setPoseReferenceFrame("link_base");
-      move_group_interface.setEndEffectorLink("m_connector");
+      // move_group_interface.setPoseReferenceFrame("link_base");
+      //move_group_interface.setEndEffectorLink("link_tcp");
+      move_group_interface.setNumPlanningAttempts(1);
       auto handle_goal = [this](
                              const rclcpp_action::GoalUUID &uuid,
                              std::shared_ptr<const GoToPosition::Goal> goal)
       {
         (void)uuid;
-        RCLCPP_INFO(this->get_logger(), "Received goal request with x %f , y %f, z %f", goal->x, goal->y, goal->z);
-        // The Fibonacci action uses int32 for the return of sequences, which means it can only hold
-        // 2^31-1 (2147483647) before wrapping negative in two's complement. Based on empirical
-        // tests, that means that an order of > 46 will cause wrapping, so we don't allow that here.
+        RCLCPP_INFO(this->get_logger(), "Received goal request with x %f , y %f, z %f , Roll %f, Pitch %f, Yaw %f", goal->x, goal->y, 
+        goal->z, goal->ax, goal->ay, goal->az);
 
         return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
       };
@@ -49,6 +46,7 @@ namespace astro_action_servers
       {
         // this needs to return quickly to avoid blocking the executor,
         // so we declare a lambda function to be called inside a new thread
+
         auto execute_in_thread = [this, goal_handle]()
         { return this->execute(goal_handle); };
         std::thread{execute_in_thread}.detach();
@@ -71,6 +69,7 @@ namespace astro_action_servers
       auto result = std::make_shared<GoToPosition::Result>();
 
       RCLCPP_INFO(this->get_logger(), "Executing goal");
+
       geometry_msgs::msg::Pose target_pose;
       const auto goal = goal_handle->get_goal();
 
@@ -79,10 +78,11 @@ namespace astro_action_servers
       tf2::Quaternion orientation;
       orientation.setRPY(goal->ax, goal->ay, goal->az);
 
-      target_pose.orientation.x = 0;
-      target_pose.orientation.y = 0;
-      target_pose.orientation.z = 0;
-      target_pose.orientation.w = 1;
+      
+      target_pose.orientation.x = orientation.x();
+      target_pose.orientation.y = orientation.y();
+      target_pose.orientation.z = orientation.z();
+      target_pose.orientation.w = orientation.w();
 
       target_pose.position.x = goal->x;
       target_pose.position.y = goal->y;
@@ -120,8 +120,16 @@ namespace astro_action_servers
       // Check if goal is done
       if (rclcpp::ok())
       {
-        goal_handle->succeed(result);
-        RCLCPP_INFO(this->get_logger(), "Goal succeeded");
+        if (success)
+        {
+          goal_handle->succeed(result);
+          RCLCPP_INFO(this->get_logger(), "Goal succeeded");
+        }
+        else
+        {
+          goal_handle->abort(result);
+          RCLCPP_ERROR(this->get_logger(), "Goal aborted");
+        }
       }
     }
   }; // class GoToPositionActionServer

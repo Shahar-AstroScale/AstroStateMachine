@@ -11,11 +11,6 @@ import enum
 
 class WaitForCmdState(ActionState):
     """
-    Class representing the state of the Fibonacci action.
-
-    Inherits from ActionState and implements methods to handle the
-    Fibonacci action in a finite state machine.
-
     Attributes:
         None
     """
@@ -30,7 +25,7 @@ class WaitForCmdState(ActionState):
         SEARCH_CONNECTOR = "search_connector"
         GO_TO_POSITION = "go_to_position"
 
-    def __init__(self) -> None:
+    def __init__(self, outcomes) -> None:
         """
         Initializes the Connect State.
 
@@ -43,7 +38,7 @@ class WaitForCmdState(ActionState):
         """
         super().__init__(
             WaitForOpCmd,  # action type
-            ACTION_NAMES.WAIT_FRO_OP_CMD,  # action name
+            ACTION_NAMES.WAIT_FOR_OP_CMD,  # action name
             self.create_goal_handler,  # callback to create the goal
             [outcome.value for outcome in self.Outcomes],  # outcomes. Includes (SUCCEED, ABORT, CANCEL)
             self.response_handler,  # callback to process the response
