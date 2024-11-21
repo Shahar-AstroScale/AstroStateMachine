@@ -10,6 +10,8 @@ from yasmin_viewer import YasminViewerPub
 
 
 
+# Make sure to write the correct path to the action server
+# Make sure to config default states into every state: SUCCEED, ABORT, CANCEL
 
 def main():
     """
