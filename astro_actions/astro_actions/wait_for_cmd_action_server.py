@@ -8,8 +8,7 @@ from astro_action_interfaces.action import WaitForOpCmd
 from astro_action_interfaces.msg import UserCmd
 from astro_actions import ACTION_NAMES
 
-
-
+import signal 
 class AstroWaitCmdActionServer(Node):
 
     def __init__(self):
@@ -32,12 +31,11 @@ class AstroWaitCmdActionServer(Node):
         self.get_logger().info("Waitin for cmd...")
         while self._incoming_cmd is None:
             time.sleep(0.4)
-        
-        
+
         result = WaitForOpCmd.Result()
         print("result.user_cmd: ", self._incoming_cmd)
         print("result.user_cmd type : ", type(self._incoming_cmd))
-        
+
         result.user_cmd = self._incoming_cmd
         self._incoming_cmd = None
         goal_handle.succeed()
@@ -49,18 +47,14 @@ class AstroWaitCmdActionServer(Node):
             self._incoming_cmd = msg
             self.is_waiting_for_cmd = False
 
-
 def main(args=None):
-
 
     rclpy.init(args=args)
     executor = MultiThreadedExecutor(num_threads=5)
-
+    # signal.signal(signal.SIGKILL,executor.shutdown())
     astro_wait_cmd_action_server = AstroWaitCmdActionServer()
     executor.add_node(astro_wait_cmd_action_server)
     executor.spin()
-    
-
 
 if __name__ == "__main__":
     main()

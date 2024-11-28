@@ -156,6 +156,48 @@ def generate_launch_description():
         parameters=[],
         arguments=["--log-level", "debug"],
     )
+
+    image_stream_publisher = Node(
+        package="astro_image_publisher",
+        executable="astro_img_publisher",
+        output="screen",
+        parameters=[],
+        arguments=["--log-level", "debug"],
+    )
+
+    aruco_publisher = Node(
+        package="aruco_publisher",
+        executable="aruco_publisher",
+        output="screen",
+        parameters=[],
+        arguments=["--log-level", "debug"],
+    )
+
+    yasmin_viewer = Node(
+        package="yasmin_viewer",
+        executable="yasmin_viewer_node",
+        output="screen",
+        parameters=[],
+        arguments=["--log-level", "debug"],
+    )
+    
+
+    tf_listener = Node(
+        package="robotic_arm_tf",
+        executable="tf_listener",
+        output="screen",
+        parameters=[],
+        arguments=["--log-level", "debug"],
+    )
+
+   
+    tf_broadcast = Node(
+        package="robotic_arm_tf",
+        executable="tf_broadcast",
+        output="screen",
+        parameters=[],
+        arguments=["--log-level", "debug"],
+    )
     # RViz
     return LaunchDescription(
         [
@@ -163,12 +205,17 @@ def generate_launch_description():
             go_to_action_server,
             wait_for_op_cmd_action_server,
             state_machine,
-            # rviz_node,
-            # static_tf,
-            # robot_state_publisher,
-            # run_move_group_node,
-            # ros2_control_node,
-            # joint_state_broadcaster_spawner,
-            # arm_controller_spawner,            
+            image_stream_publisher,
+            aruco_publisher,  
+            yasmin_viewer,  
+            rviz_node,
+            static_tf,
+            robot_state_publisher,
+            run_move_group_node,
+            ros2_control_node,
+            joint_state_broadcaster_spawner,
+            arm_controller_spawner,
+            tf_listener,
+            tf_broadcast      
         ]
     )

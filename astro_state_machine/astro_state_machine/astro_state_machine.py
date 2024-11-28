@@ -56,9 +56,7 @@ def main():
     sm.add_state(
         "WAIT_FOR_OP_CMD",
         WaitForCmdState(
-            outcomes=[WaitForCmdState.Outcomes.GO_TO_POSITION.value , WaitForCmdState.Outcomes.SHUTDOWN.value, 
-                      WaitForCmdState.Outcomes.CONNECT.value, WaitForCmdState.Outcomes.SEARCH_CONNECTOR.value, 
-                      WaitForCmdState.Outcomes.MANUAL_CONTROL.value, WaitForCmdState.Outcomes.SELF_TEST.value] ,
+            outcomes=None,
         ),
         transitions={
             SUCCEED: "finish",
@@ -68,8 +66,20 @@ def main():
             WaitForCmdState.Outcomes.SEARCH_CONNECTOR.value : "SEARCH_CONNECTOR",
             WaitForCmdState.Outcomes.MANUAL_CONTROL.value : "MANUAL_CONTROL",
             WaitForCmdState.Outcomes.GO_TO_POSITION.value: "GO_TO_POSITION",
+            WaitForCmdState.Outcomes.APPROACH_CONNECTOR.value: "APPROACH_CONNECTOR",
+            WaitForCmdState.Outcomes.WAIT_FOR_OP_CMD.value: "WAIT_FOR_OP_CMD",
             ABORT:"WAIT_FOR_OP_CMD",
             CANCEL: "finish",
+        },
+    )
+
+    sm.add_state(
+        "APPROACH_CONNECTOR",
+        ApproachConnectorState(),
+        transitions={
+            SUCCEED: "WAIT_FOR_OP_CMD",
+            CANCEL: "WAIT_FOR_OP_CMD",
+            ABORT: "WAIT_FOR_OP_CMD",
         },
     )
 

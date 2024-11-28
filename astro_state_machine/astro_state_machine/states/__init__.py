@@ -6,3 +6,4 @@ from .wait_for_cmd import WaitForCmdState
 from .manual_control import ManualControlState
 from .search_connector import SearchConnectorState
 from .shutdown import ShutdownState
+from .approach_connector import ApproachConnectorState

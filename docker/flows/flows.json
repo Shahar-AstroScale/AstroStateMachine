@@ -1,0 +1,67 @@
+[
+    {
+        "id": "cbdf713be40c1640",
+        "type": "ROS2 Inject",
+        "z": "da77dac00f117eb7",
+        "g": "d636ae98e083f355",
+        "types": [],
+        "props": [
+            {
+                "p": "cmd_type",
+                "v": "9",
+                "t": "byte"
+            },
+            {
+                "p": "x",
+                "v": "0",
+                "vt": "num",
+                "t": "float32"
+            },
+            {
+                "p": "y",
+                "v": "0",
+                "vt": "num",
+                "t": "float32"
+            },
+            {
+                "p": "z",
+                "v": "0.7",
+                "vt": "num",
+                "t": "float32"
+            },
+            {
+                "p": "ax",
+                "v": "0",
+                "vt": "num",
+                "t": "float32"
+            },
+            {
+                "p": "ay",
+                "v": "0",
+                "vt": "num",
+                "t": "float32"
+            },
+            {
+                "p": "az",
+                "v": "0",
+                "vt": "num",
+                "t": "float32"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "ros2type": "astro_action_interfaces/msg/UserCmd",
+        "idltype": "",
+        "x": 690,
+        "y": 180,
+        "wires": [
+            [
+                "cddf7e09da2f3973",
+                "c01df58a1efa41bb"
+            ]
+        ]
+    }
+]

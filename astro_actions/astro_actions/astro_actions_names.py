@@ -11,6 +11,7 @@ class _ACTION_NAMES:
     CONNECTOR_SEARCH: str = "connector_search"
     GO_TO_POSITION: str = "go_to_position"
     CONNECT: str = "connect"
+    APPROACH_CONNECTOR: str = "approach_connector"
 
 
 ACTION_NAMES = _ACTION_NAMES()

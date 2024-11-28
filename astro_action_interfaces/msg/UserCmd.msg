@@ -7,13 +7,8 @@ int64 SHUTDOWN = 0x06
 int64 CONNECT = 0x07
 int64 SEARCH_CONNECTOR = 0x08
 int64 GO_TO_POSITION = 0x09
+int64 APPROACH_CONNECTOR = 0x0A
 
 int64 cmd_type
 
-float32 x
-float32 y
-float32 z
-
-float32 ax
-float32 ay
-float32 az
+KeyValue[] values_array

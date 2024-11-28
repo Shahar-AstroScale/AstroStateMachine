@@ -4,10 +4,11 @@ from yasmin_ros import ActionState
 from yasmin_ros.ros_logs import set_ros_loggers
 from yasmin_ros.basic_outcomes import SUCCEED, ABORT, CANCEL
 from astro_actions import ACTION_NAMES
-from astro_action_interfaces.action import Connect
+from astro_action_interfaces.action import MoveToPosition
+import enum
 
 
-class ConnectState(ActionState):
+class ApproachConnectorState(ActionState):
     """
     Class representing the state of the Fibonacci action.
 
@@ -17,6 +18,10 @@ class ConnectState(ActionState):
     Attributes:
         None
     """
+    # class Outcomes(enum.Enum):
+        
+    #     # CONNECT = "connect"
+    #     WAIT_FOR_OP_CMD = "wait_for_op_cmd"
 
     def __init__(self) -> None:
         """
@@ -30,31 +35,28 @@ class ConnectState(ActionState):
             None
         """
         super().__init__(
-            Connect,  # action type
-            ACTION_NAMES.CONNECT,  # action name
+            MoveToPosition,  # action type
+            ACTION_NAMES.APPROACH_CONNECTOR,  # action name
             self.create_goal_handler,  # callback to create the goal
             None,  # outcomes. Includes (SUCCEED, ABORT, CANCEL)
             self.response_handler,  # callback to process the response
             self.print_feedback,  # callback to process the feedback
         )
 
-    def create_goal_handler(self, blackboard: Blackboard) -> Connect.Goal:
+    def create_goal_handler(self, blackboard: Blackboard) -> MoveToPosition.Goal:
         
         print(f"blackboard: {blackboard}")
-        
-        goal = Connect.Goal()
-        goal.x = blackboard["next_position"]["x"]
-        goal.y = blackboard["next_position"]["y"]
-        goal.z = blackboard["next_position"]["z"]
-        goal.ax = blackboard["next_position"]["ax"] 
-        goal.ay = blackboard["next_position"]["ay"]
-        goal.az = blackboard["next_position"]["az"]
-        
-
+        goal = MoveToPosition.Goal()
+        goal.x = blackboard["connector_position"]["x"]
+        goal.y = blackboard["connector_position"]["y"]
+        goal.z = blackboard["connector_position"]["z"] - blackboard['connector_tolerance']
+        goal.ax = blackboard["connector_position"]["ax"] 
+        goal.ay = blackboard["connector_position"]["ay"]
+        goal.az = blackboard["connector_position"]["az"]        
         return goal
 
     def response_handler(
-        self, blackboard: Blackboard, response: Connect.Result
+        self, blackboard: Blackboard, response: MoveToPosition.Result
     ) -> str:
         """
         Parameters:
@@ -73,6 +75,6 @@ class ConnectState(ActionState):
         return SUCCEED
 
     def print_feedback(
-        self, blackboard: Blackboard, feedback: Connect.Feedback
+        self, blackboard: Blackboard, feedback: MoveToPosition.Feedback
     ) -> None:
         ...

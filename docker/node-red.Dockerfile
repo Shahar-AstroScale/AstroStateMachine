@@ -8,7 +8,7 @@ WORKDIR /astro_ws/src
 copy astro_action_interfaces astro_action_interfaces
 RUN cd /astro_ws && \
 source /opt/ros/$ROS_DISTRO/setup.bash  \
-&& colcon build \
+&& colcon build 
 
 
 # Enable overlay execution

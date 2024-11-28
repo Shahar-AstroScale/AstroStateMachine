@@ -14,6 +14,7 @@ setup(
         (os.path.join('share', package_name), glob('launch/*.launch.py'))
     ],
     install_requires=['setuptools'],
+    setup_requires=['strenum'],
     zip_safe=True,
     maintainer='gidi',
     maintainer_email='gideon.szanton@algowis.com',

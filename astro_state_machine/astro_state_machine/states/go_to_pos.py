@@ -47,12 +47,13 @@ class GoToPosState(ActionState):
         print(f"blackboard: {blackboard}")
         
         goal = MoveToPosition.Goal()
-        goal.ax = blackboard["next_position"]["ax"] 
-        goal.ay = blackboard["next_position"]["ay"]
-        goal.az = blackboard["next_position"]["az"]
         goal.x = blackboard["next_position"]["x"]
         goal.y = blackboard["next_position"]["y"]
         goal.z = blackboard["next_position"]["z"]
+        goal.ax = blackboard["next_position"]["ax"] 
+        goal.ay = blackboard["next_position"]["ay"]
+        goal.az = blackboard["next_position"]["az"]
+        
 
         return goal
 
